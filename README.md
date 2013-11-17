@@ -19,11 +19,13 @@ This is super alpha stuff right now.
 * Database credentials.
 
 # TODO
+* Mobile version! Figuring out reply-to is gonna be hard on mobile. I might have to go PESOS for mobile reply-to or give up that metadata.
+
+* Add links back to original when syndicating.
+
 * Credentials! CREDENTIALSSSSSSsss
 
 * Status display page
-
-* Reply-to: Add an optional field up top that can take either twitter status links (https://twitter.com/tinynietzsche/status/401955404294258689), or facebook status links (https://www.facebook.com/sammy.gimbel/posts/10100271878774627). Give some sort of preview, then associate status with
 
 * Reply context on status display page
 
