@@ -1,3 +1,13 @@
+# posse-twitter
+
+Publish (on your) Own Site, Syndicate Elsewhere microblogging.
+
+![pic](https://i.cloudup.com/LAXz2TKvl6.png)
+
+The "elsewhere" is currently twitter. I'll probably change the name of this repo to `posse-microblog` and have pluggable modules for syndication, `posse-microblog-twitter` and `posse-microblog-facebook`, for example.
+
+This is super alpha stuff right now.
+
 # Setup
 
 * Go to http://dev.twitter.com and register an application to get your API credentials. Make sure you request Read, Write & DM privileges and generate your token.
