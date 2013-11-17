@@ -1,6 +1,11 @@
+* {
+  transition: all 0.5s;
+}
+
 body {
   width: 32em;
   font-family: 'Fira Sans';
+  line-height: 1.3em;
   margin: auto;
 }
 textarea {
@@ -39,4 +44,55 @@ input[name="replyTo"] {
   font-weight: bold;
   color: #ccc;
   text-shadow: 1px 1px 3px #eee;
+}
+.reply a {
+  color: #acf;
+  text-decoration: none;
+}
+.reply a:hover {
+  color: #7af;
+}
+
+.reply, time {
+  font-size: 75%;
+}
+time a {
+  font-weight: 300;
+  white-space: nowrap;
+}
+time a {
+  color: #ddd;
+  text-decoration: none;
+  border-bottom: 1px solid #fff;
+}
+article {
+  opacity: 0.8;
+  color: #555;
+}
+article .status {
+  display: inline;
+}
+article .status a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #444;
+}
+.status a {
+  border-bottom: 1px dotted #fff;
+}
+.status a:hover {
+  border-bottom: 1px dotted #444;
+}
+article:hover{
+  opacity: 1.0
+}
+article:hover time a {
+  color: #bbb;
+}
+time a:hover {
+  color: #999;
+  border-bottom: 1px solid #aaa;
+}
+article {
+  padding: 1em 0
 }

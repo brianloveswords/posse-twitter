@@ -21,6 +21,8 @@ This is super alpha stuff right now.
 # TODO
 * Mobile version! Figuring out reply-to is gonna be hard on mobile. I might have to go PESOS for mobile reply-to or give up that metadata.
 
+* Optional lat & long for updates.
+
 * Add links back to original when syndicating.
 
 * Credentials! CREDENTIALSSSSSSsss

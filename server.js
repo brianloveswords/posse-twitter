@@ -4,14 +4,18 @@ const url = require('url')
 const fs = require('fs')
 const path = require('path')
 const concat = require('concat-stream')
+const xtend = require('xtend')
 const qs = require('querystring')
 const domain = require('domain')
 const JSONStream = require('JSONStream')
 const ecstatic = require('ecstatic')
+const mapStream = require('map-stream')
+const moment = require('moment')
 
 const status = require('./db/status')
 const twitter = require('./db/twitter')
 const tweet = require('./tweet')
+const template = require('./template')
 
 router.addRoute('/', index)
 router.addRoute('/status', statusPage)
@@ -39,16 +43,41 @@ server.listen(3000)
 function render(name) {
   return function (req, res) {
     res.setHeader('content-type','text/html; charset=utf8')
+    res.write(template.header())
     const file = path.join(__dirname, 'templates', name + '.html')
-    fs.createReadStream(file).pipe(res)
+    fs.createReadStream(file)
+      .on('end', finish)
+      .pipe(res, { end: false })
+    function finish() { res.end(template.footer()) }
   }
 }
 
 function index(req, res) {
-  res.writeHead(200, { 'content-type': 'application/json' })
-  status.createReadStream()
-    .pipe(JSONStream.stringify())
-    .pipe(res)
+  res.setHeader('content-type','text/html; charset=utf8')
+  res.write(template.header())
+  status.createReadStream({}, {
+    sort: { createdAt: 'desc' },
+  }).on('end', function finish() {
+
+    res.end(template.footer())
+
+  }).pipe(mapStream(function rows(row, next) {
+
+    console.dir(row)
+
+    const when = moment(row.createdAt).fromNow()
+    const datetime = row.createdAt.toISOString()
+    const reply = row.replyTo ? { link: row.replyTo } : null
+
+    console.dir(when)
+
+    next(null, template.status(xtend(row, {
+      datetime: datetime,
+      when: when,
+      reply: reply,
+    })))
+
+  })).pipe(res)
 }
 
 function statusPage(req, res) {
@@ -80,8 +109,6 @@ function statusPage(req, res) {
           replyTo: replyToStatusId
         }, function (err, result) {
           if (err) throw err
-
-          console.dir(result)
 
           twitter.put({
             statusId: meta.insertId,

@@ -1,0 +1,12 @@
+<article id="status-{{id}}" data-reply-to="{{replyTo}}">
+  {{#reply}}
+  <aside class="reply">
+   &#x290f; <a href="{{link}}">{{{link}}}</a>
+  </aside>
+  {{/reply}}
+
+  <p class="status">{{{linkify text}}}</p>
+
+  <time datetime="{{datetime}}"><a href="/status/{{id}}">{{when}}↗</a></time>
+
+</article>
