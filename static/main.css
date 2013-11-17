@@ -1,0 +1,37 @@
+body {
+  width: 32em;
+  font-family: 'Fira Sans';
+  margin: auto;
+}
+textarea {
+  display: block;
+  width: 100%;
+  margin: 1em 0;
+  height: 6em;
+  font-size: 1.7em;
+}
+
+input[type="submit"] {
+  font-family: 'Fira Sans';
+  font-size: 1.7em;
+  background: #3af;
+  border: 1px solid #2ad;
+  padding: 0.2em 0.4em;
+  border-radius: 5px;
+  color: #fff;
+  box-shadow: 1px 1px 2px #ddd;
+  text-shadow: -1px -1px 1px #03a;
+}
+input[type="submit"]:active {
+  background: #6bf;
+  text-shadow: none;
+}
+input[type="submit"]:focus {
+  box-shadow: 1px 1px 2px #333;
+}
+#character-count {
+  text-align: right;
+  font-weight: bold;
+  color: #ccc;
+  text-shadow: 1px 1px 3px #eee;
+}

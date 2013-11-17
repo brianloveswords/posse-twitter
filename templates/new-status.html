@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang='en'>
+  <head>
+    <title>Post new status</title>
+    <link rel="stylesheet" type="text/css" href="/static/fira.css">
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+  </head>
+  <body>
+    <h1>New Status</h1>
+    <form method="post" action="/status">
+      <textarea id="status" name="text" data-key="ctrl+enter" data-action="submit"></textarea>
+      <aside id="character-count">140</aside>
+      <input type="submit" value="Post Status">
+    </form>
+
+    <script src="/static/post-status.js"></script>
+  </body>
+</html>

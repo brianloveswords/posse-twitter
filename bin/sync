@@ -1,0 +1,2 @@
+#!/bin/bash
+rsync -avc --del . bumblebee:apps/posse-twitter
