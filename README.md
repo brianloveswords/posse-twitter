@@ -1,4 +1,15 @@
+# Setup
+
+* Go to http://dev.twitter.com and register an application to get your API credentials. Make sure you request Read, Write & DM privileges and generate your token.
+
+* Copy `twitter-config.json.example` to `twitter-config.json` and fill out your API details.
+
+* Oh yeah, database stuff. Schemas are in `sql/schemas.sql`
+
+* Database credentials.
+
 # TODO
+* Credentials! CREDENTIALSSSSSSsss
 
 * Status display page
 

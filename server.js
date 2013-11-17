@@ -58,26 +58,37 @@ function statusPage(req, res) {
   if (req.method != 'POST')
     return notFound(res)
 
-
   const dom = domain.create()
   dom.add(res)
   dom.on('error', function (err) {
     return serverError(err, res)
   })
 
-
   dom.run(function () {
     req.pipe(concat(function (data) {
       const post = qs.parse(data.toString('utf8'))
-      status.put({ text: post.text }, function (err, meta) {
+      const replyToStatusId = tweet.extractId(post.replyTo)
+
+      status.put({
+        text: post.text,
+        replyTo: post.replyTo
+      }, function (err, meta) {
         if (err) throw err
-        tweet(post.text, function (err, result) {
+
+        tweet({
+          status: post.text,
+          replyTo: replyToStatusId
+        }, function (err, result) {
+          if (err) throw err
+
           console.dir(result)
+
           twitter.put({
             statusId: meta.insertId,
             twitterId: result.id_str
           }, function (err, meta) {
             if (err) throw err
+
             res.end('got it, put it, done')
           })
         })

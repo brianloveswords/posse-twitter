@@ -8,6 +8,10 @@
   <body>
     <h1>New Status</h1>
     <form method="post" action="/status">
+      <label>Reply To?
+        <input type="text" name="replyTo" placeholder="https://twitter.com/brianloveswords/status/12345"/>
+      </label>
+
       <textarea id="status" name="text" data-key="ctrl+enter" data-action="submit"></textarea>
       <aside id="character-count">140</aside>
       <input type="submit" value="Post Status">

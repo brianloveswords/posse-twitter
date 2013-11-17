@@ -10,7 +10,6 @@ textarea {
   height: 6em;
   font-size: 1.7em;
 }
-
 input[type="submit"] {
   font-family: 'Fira Sans';
   font-size: 1.7em;
@@ -28,6 +27,12 @@ input[type="submit"]:active {
 }
 input[type="submit"]:focus {
   box-shadow: 1px 1px 2px #333;
+}
+input[type="submit"]:focus {
+  box-shadow: 1px 1px 2px #333;
+}
+input[name="replyTo"] {
+  width: 39.3em;
 }
 #character-count {
   text-align: right;

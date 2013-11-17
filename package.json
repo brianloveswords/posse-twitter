@@ -9,7 +9,8 @@
     "twit": "~1.1.11",
     "mysql-stream-db": "0.0.1",
     "concat-stream": "~1.2.0",
-    "handlebars": "~1.1.2"
+    "handlebars": "~1.1.2",
+    "tap": "~0.4.4"
   },
   "devDependencies": {},
   "scripts": {
