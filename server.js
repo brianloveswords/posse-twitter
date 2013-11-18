@@ -70,8 +70,6 @@ function index(req, res) {
     const reply = row.replyTo ? { link: row.replyTo } : null
     const reblog = row.reblog ? { link: row.reblog } : null
 
-// ⥀
-
     next(null, template.status(xtend(row, {
       datetime: datetime,
       when: when,
@@ -170,7 +168,8 @@ function statusPage(req, res) {
           }, function (err, meta) {
             if (err) throw err
 
-            res.end('got it, put it, done')
+            res.writeHead(303, { Location: '/' })
+            res.end()
           })
         })
       })
