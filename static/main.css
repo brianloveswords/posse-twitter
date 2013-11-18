@@ -89,6 +89,11 @@ article:hover{
 article:hover time a {
   color: #bbb;
 }
+time {
+  display: inline-block;
+  padding-left: 0.3em
+}
+
 time a:hover {
   color: #999;
   border-bottom: 1px solid #aaa;

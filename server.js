@@ -63,13 +63,9 @@ function index(req, res) {
 
   }).pipe(mapStream(function rows(row, next) {
 
-    console.dir(row)
-
     const when = moment(row.createdAt).fromNow()
     const datetime = row.createdAt.toISOString()
     const reply = row.replyTo ? { link: row.replyTo } : null
-
-    console.dir(when)
 
     next(null, template.status(xtend(row, {
       datetime: datetime,
