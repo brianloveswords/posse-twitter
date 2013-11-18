@@ -68,11 +68,15 @@ function index(req, res) {
     const when = moment(row.createdAt).fromNow()
     const datetime = row.createdAt.toISOString()
     const reply = row.replyTo ? { link: row.replyTo } : null
+    const reblog = row.reblog ? { link: row.reblog } : null
+
+// ⥀
 
     next(null, template.status(xtend(row, {
       datetime: datetime,
       when: when,
       reply: reply,
+      reblog: reblog,
     })))
 
   })).pipe(res)

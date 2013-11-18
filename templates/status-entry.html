@@ -1,9 +1,22 @@
-<article id="status-{{id}}" data-reply-to="{{replyTo}}">
+<article id="status-{{id}}" data-reply-to="{{reply.link}}" data-reblog="{{reblog.link}}">
   {{#reply}}
-  <aside class="reply">
-   &#x290f; <a href="{{link}}">{{{link}}}</a>
+  <aside class="external-link reply">
+    <a href="{{link}}" target="_blank">
+      <i>&#x290f;</i>
+      {{{link}}}
+    </a>
   </aside>
   {{/reply}}
+
+  {{#reblog}}
+  <aside class="external-link reblog">
+    <a href="{{link}}" target="_blank">
+      <i>&#8634;</i>
+      {{{link}}}
+    </a>
+  </aside>
+  {{/reblog}}
+
 
   <p class="status">{{{linkify text}}}</p>
 

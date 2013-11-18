@@ -45,17 +45,27 @@ input[name="replyTo"], input[name="statusLink"]{
   color: #ccc;
   text-shadow: 1px 1px 3px #eee;
 }
-.reply a {
+.external-link a {
   color: #acf;
   text-decoration: none;
 }
-.reply a:hover {
+.external-link a:hover {
   color: #7af;
 }
-
-.reply, time {
+.external-link, time {
   font-size: 75%;
 }
+.external-link i {
+  font-style: normal;
+  font-size: 120%;
+}
+.external-link.reply i {
+  color: #d3d;
+}
+.external-link.reblog i {
+  color: #f60;
+}
+
 time a {
   font-weight: 300;
   white-space: nowrap;
