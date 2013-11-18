@@ -1,7 +1,12 @@
+/* * {
+  transition: all 0.5s;
+}
+*/
 body {
   width: 32em;
   font-family: 'Fira Sans';
   line-height: 1.3em;
+  padding: 3em 0;
   margin: auto;
 }
 textarea {

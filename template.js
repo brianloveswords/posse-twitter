@@ -16,6 +16,7 @@ module.exports = {
 }
 
 handlebars.registerHelper('linkify', linkify)
+handlebars.registerHelper('default', defaultText)
 
 function read(name) {
   const file = path.join(__dirname, 'templates', name)
@@ -40,4 +41,8 @@ function linkify(text) {
     })
 
   return withLinks
+}
+
+function defaultText(thing, default_) {
+  return thing || default_;
 }

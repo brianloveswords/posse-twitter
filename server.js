@@ -42,10 +42,10 @@ server.on('listening', function () {
 
 server.listen(3000)
 
-function render(name) {
+function render(name, title) {
   return function (req, res) {
     res.setHeader('content-type','text/html; charset=utf8')
-    res.write(template.header())
+    res.write(template.header({title: title}))
     const file = path.join(__dirname, 'templates', name + '.html')
     fs.createReadStream(file)
       .on('end', finish)
@@ -82,7 +82,7 @@ function index(req, res) {
 
 function reblogPage(req, res) {
   if (req.method == 'GET')
-    return render('reblog')(req, res)
+    return render('reblog', 'Reblog a Status')(req, res)
 
   if (req.method != 'POST')
     return notFound(res)
@@ -134,7 +134,7 @@ function reblogPage(req, res) {
 
 function statusPage(req, res) {
   if (req.method == 'GET')
-    return render('new-status')(req, res)
+    return render('new-status', 'Post a New Status')(req, res)
 
   if (req.method != 'POST')
     return notFound(res)
