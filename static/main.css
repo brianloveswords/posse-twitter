@@ -1,7 +1,3 @@
-* {
-  transition: all 0.5s;
-}
-
 body {
   width: 32em;
   font-family: 'Fira Sans';
@@ -46,6 +42,7 @@ input[name="replyTo"], input[name="statusLink"]{
   text-shadow: 1px 1px 3px #eee;
 }
 .external-link a {
+  /* transition: color 0.3s; */
   color: #acf;
   text-decoration: none;
 }
@@ -65,19 +62,27 @@ input[name="replyTo"], input[name="statusLink"]{
 .external-link.reblog i {
   color: #f60;
 }
-
-time a {
-  font-weight: 300;
-  white-space: nowrap;
+time {
+  display: inline-block;
+  padding-left: 0.3em
 }
 time a {
   color: #ddd;
+  font-weight: 300;
+  white-space: nowrap;
   text-decoration: none;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px dotted #fff;
+}
+time a:hover {
+  /* transition: border 0.3s; */
+  color: #999;
+  border-bottom: 1px dotted #ddd;
 }
 article {
-  opacity: 0.8;
+  /* transition: opacity 0.3s; */
+  opacity: 0.75;
   color: #555;
+  padding: 1em 0
 }
 article .status {
   display: inline;
@@ -88,6 +93,7 @@ article .status a {
   color: #444;
 }
 .status a {
+  /* transition: border 0.3s; */
   border-bottom: 1px dotted #fff;
 }
 .status a:hover {
@@ -98,16 +104,4 @@ article:hover{
 }
 article:hover time a {
   color: #bbb;
-}
-time {
-  display: inline-block;
-  padding-left: 0.3em
-}
-
-time a:hover {
-  color: #999;
-  border-bottom: 1px solid #aaa;
-}
-article {
-  padding: 1em 0
 }
