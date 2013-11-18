@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `status` (
   `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `text` TEXT,
   `replyTo` TEXT,
+  `reblog` TEXT,
   KEY `createdAt` (`createdAt`)
 ) ENGINE=InnoDB;
 

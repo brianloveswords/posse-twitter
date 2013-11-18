@@ -11,6 +11,7 @@ const JSONStream = require('JSONStream')
 const ecstatic = require('ecstatic')
 const mapStream = require('map-stream')
 const moment = require('moment')
+const util = require('util')
 
 const status = require('./db/status')
 const twitter = require('./db/twitter')
@@ -19,6 +20,7 @@ const template = require('./template')
 
 router.addRoute('/', index)
 router.addRoute('/status', statusPage)
+router.addRoute('/reblog', reblogPage)
 router.addRoute('/static/*', ecstatic({
   baseDir: '/static',
   root: './static'
@@ -74,6 +76,58 @@ function index(req, res) {
     })))
 
   })).pipe(res)
+}
+
+function reblogPage(req, res) {
+  if (req.method == 'GET')
+    return render('reblog')(req, res)
+
+  if (req.method != 'POST')
+    return notFound(res)
+
+  req.pipe(concat(function (data) {
+    const post = qs.parse(data.toString('utf8'))
+    const statusId = tweet.extractId(post.statusLink)
+
+    const dom = domain.create()
+    dom.add(res)
+    dom.on('error', function (err) {
+      return serverError(err, res)
+    })
+
+    dom.run(function () {
+      // 1. retweet to twitter
+      tweet.retweet({ id: statusId }, function (err, resp) {
+        if (err) throw err
+
+        const tweetId = resp.id_str
+        const text = util.format(
+          'RT @%s: %s',
+          resp.retweeted_status.user.screen_name,
+          resp.retweeted_status.text)
+
+        // 2. get text back, post to own `status` table
+        status.put({
+          text: text,
+          reblog: post.statusLink
+        }, function (err, meta) {
+          if (err) throw err
+
+          // 3. get status id back, post to `twitter` table
+          twitter.put({
+            statusId: meta.insertId,
+            twitterId: tweetId
+          }, function (err, meta) {
+            if (err) throw err
+
+            // 4. redirect
+            res.writeHead(303, { Location: '/' })
+            res.end()
+          })
+        })
+      })
+    })
+  }))
 }
 
 function statusPage(req, res) {

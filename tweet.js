@@ -10,10 +10,16 @@ function tweet(opts, callback) {
   twitter.post('statuses/update', params, callback)
 }
 
-tweet.extractId = function (str) {
+tweet.extractId = function extractId(str) {
   const pattern = /https?:\/\/twitter.com\/.*?\/status\/(\d+)/
   const match = pattern.exec(str)
   if (!match) return
   const statusId = match[1]
   return statusId
+}
+
+tweet.retweet = function (opts, callback) {
+  const id = opts.id
+  const url = 'statuses/retweet/' + id
+  twitter.post(url, { }, callback)
 }
