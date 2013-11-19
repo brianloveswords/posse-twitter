@@ -2,3 +2,4 @@ twitter-config.json
 node_modules
 bin/sync
 /.cookie_secret
+/config.json
