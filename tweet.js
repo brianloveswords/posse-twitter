@@ -1,4 +1,6 @@
-const twitter = require('./twitter-client')
+const config = require('./env').get('twitter')
+const Twit = require('twit')
+const twitter = new Twit(config)
 
 module.exports = tweet
 
