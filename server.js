@@ -188,6 +188,8 @@ function statusPage(req, res) {
 }
 
 function loginPage(req, res) {
+  req.session.datetime = Date.now()
+
   if (req.method == 'GET')
     return render('login', {
       title: 'Login',
