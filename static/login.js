@@ -5,12 +5,14 @@
 
   const user = $form.data('user')
 
+  console.dir(user)
+
   $login.on('click', function (evt) {
     navigator.id.request()
   })
 
   navigator.id.watch({
-    loggedInUser: user,
+    loggedInUser: user || null,
     onlogin: function (assertion) {
       $assertion.val(assertion)
       $form.attr('action', $form.data('login-url'))

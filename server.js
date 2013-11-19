@@ -23,6 +23,7 @@ const template = require('./template')
 
 router.addRoute('/', index)
 router.addRoute('/login', withSession(loginPage))
+router.addRoute('/logout', withSession(logout))
 router.addRoute('/status', requireAdmin(statusPage))
 router.addRoute('/reblog', requireAdmin(reblogPage))
 router.addRoute('/static/*', ecstatic({
@@ -207,6 +208,11 @@ function loginPage(req, res) {
       redirect(res, '/')
     })
   })
+}
+
+function logout(req, res) {
+  req.session.user = null
+  redirect(res, '/')
 }
 
 function redirect(res, location) {
