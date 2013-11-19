@@ -178,23 +178,26 @@ function statusPage(req, res) {
       const post = qs.parse(data.toString('utf8'))
       const replyToStatusId = tweet.extractId(post.replyTo)
 
-      status.put({
-        text: post.text,
-        replyTo: post.replyTo
-      }, function (err, meta) {
+      tweet({
+        status: post.text,
+        replyTo: replyToStatusId
+      }, function (err, result) {
         if (err) throw err
+        const twitterId = result.id_str
 
-        tweet({
-          status: post.text,
-          replyTo: replyToStatusId
-        }, function (err, result) {
+        status.put({
+          text: post.text,
+          replyTo: post.replyTo
+        }, function (err, meta) {
           if (err) throw err
+          const statusId = meta.insertId
 
           twitter.put({
-            statusId: meta.insertId,
-            twitterId: result.id_str
+            statusId: statusId,
+            twitterId: twitterId,
           }, function (err, meta) {
             if (err) throw err
+
             redirect(res, '/')
           })
         })
