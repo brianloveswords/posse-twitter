@@ -4,22 +4,23 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "level": "~0.17.0-1",
     "routes": "~0.2.0",
     "twit": "~1.1.11",
     "mysql-stream-db": "0.0.4",
     "concat-stream": "~1.2.0",
     "handlebars": "~1.1.2",
-    "tap": "~0.4.4",
     "map-stream": "0.0.3",
     "xtend": "~2.1.1",
     "moment": "~2.4.0",
     "client-sessions": "git://github.com/brianloveswords/node-client-sessions.git#50e3c18d01df6d7201b3e7749f63a2f46406bccc",
     "habitat": "~1.1.0",
     "lodash.foreach": "~2.3.0",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "ecstatic": "~0.4.12"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tap": "~0.4.4"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
