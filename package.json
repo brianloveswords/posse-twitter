@@ -16,7 +16,8 @@
     "moment": "~2.4.0",
     "client-sessions": "git://github.com/brianloveswords/node-client-sessions.git#50e3c18d01df6d7201b3e7749f63a2f46406bccc",
     "habitat": "~1.1.0",
-    "lodash.foreach": "~2.3.0"
+    "lodash.foreach": "~2.3.0",
+    "request": "~2.27.0"
   },
   "devDependencies": {},
   "scripts": {
