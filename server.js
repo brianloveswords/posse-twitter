@@ -23,6 +23,7 @@ const template = require('./template')
 router.addRoute('/', index)
 router.addRoute('/login', withSession(loginPage))
 router.addRoute('/logout', withSession(logout))
+router.addRoute('/status/:id', singleStatus)
 router.addRoute('/status', requireAdmin(statusPage))
 router.addRoute('/reblog', requireAdmin(reblogPage))
 router.addRoute('/static/*', ecstatic({
@@ -60,6 +61,20 @@ function render(name, context) {
   }
 }
 
+function hydrateStatusRow(row) {
+  const when = moment(row.createdAt).fromNow()
+  const datetime = row.createdAt.toISOString()
+  const reply = row.replyTo ? { link: row.replyTo } : null
+  const reblog = row.reblog ? { link: row.reblog } : null
+
+  return xtend(row, {
+    datetime: datetime,
+    when: when,
+    reply: reply,
+    reblog: reblog,
+  })
+}
+
 function index(req, res) {
   res.setHeader('content-type','text/html; charset=utf8')
   res.write(template.header())
@@ -71,19 +86,21 @@ function index(req, res) {
 
   }).pipe(mapStream(function rows(row, next) {
 
-    const when = moment(row.createdAt).fromNow()
-    const datetime = row.createdAt.toISOString()
-    const reply = row.replyTo ? { link: row.replyTo } : null
-    const reblog = row.reblog ? { link: row.reblog } : null
-
-    next(null, template.status(xtend(row, {
-      datetime: datetime,
-      when: when,
-      reply: reply,
-      reblog: reblog,
-    })))
+    next(null, template.status(hydrateStatusRow(row)))
 
   })).pipe(res)
+}
+
+function singleStatus(req, res) {
+  status.getOne({ id: this.params.id }, function (err, row) {
+    if (err) return serverError(err, res)
+    if (!row) return notFound(req, res)
+
+    res.write(template.header())
+    res.write(template.status(hydrateStatusRow(row)))
+    res.write(template.footer())
+    res.end()
+  })
 }
 
 function reblogPage(req, res) {
