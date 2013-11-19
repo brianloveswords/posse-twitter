@@ -207,6 +207,7 @@ function loginPage(req, res) {
   req.session.datetime = Date.now()
 
   if (req.method == 'GET')
+    res.setHeader('cache-control', 'no-cache, no-store, must-revalidate')
     return render('login', {
       title: 'Login',
       user: req.session.user
