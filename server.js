@@ -13,26 +13,31 @@ const mapStream = require('map-stream')
 const moment = require('moment')
 const util = require('util')
 
+const env = require('./env')
+const persona = require('./persona')
+const session = require('./session')
 const status = require('./db/status')
 const twitter = require('./db/twitter')
 const tweet = require('./tweet')
 const template = require('./template')
 
 router.addRoute('/', index)
-router.addRoute('/status', statusPage)
-router.addRoute('/reblog', reblogPage)
+router.addRoute('/login', withSession(loginPage))
+router.addRoute('/status', requireAdmin(statusPage))
+router.addRoute('/reblog', requireAdmin(reblogPage))
 router.addRoute('/static/*', ecstatic({
   baseDir: '/static',
   root: './static'
 }))
 
 const server = http.createServer()
+
 server.on('request', function (req, res) {
   const urlParts = url.parse(req.url)
   const match = router.match(urlParts.pathname)
   if (match)
     return match.fn.call(match, req, res)
-  return notFound(res)
+  return notFound(req, res)
 })
 
 server.on('listening', function () {
@@ -42,15 +47,16 @@ server.on('listening', function () {
 
 server.listen(3000)
 
-function render(name, title) {
+function render(name, context) {
+  if (typeof context == 'string')
+    context = { title: context }
+
   return function (req, res) {
+    const tpl = template.fromFile(name + '.html')
     res.setHeader('content-type','text/html; charset=utf8')
-    res.write(template.header({title: title}))
-    const file = path.join(__dirname, 'templates', name + '.html')
-    fs.createReadStream(file)
-      .on('end', finish)
-      .pipe(res, { end: false })
-    function finish() { res.end(template.footer()) }
+    res.write(template.header(context))
+    res.write(tpl(context))
+    res.end(template.footer())
   }
 }
 
@@ -85,7 +91,7 @@ function reblogPage(req, res) {
     return render('reblog', 'Reblog a Status')(req, res)
 
   if (req.method != 'POST')
-    return notFound(res)
+    return notFound(req, res)
 
   req.pipe(concat(function (data) {
     const post = qs.parse(data.toString('utf8'))
@@ -133,11 +139,16 @@ function reblogPage(req, res) {
 }
 
 function statusPage(req, res) {
+  const auth = env('auth')
+  const user = req.session.user
+  if (!user || user !== auth.get('admin'))
+    return forbidden(res)
+
   if (req.method == 'GET')
     return render('new-status', 'Post a New Status')(req, res)
 
   if (req.method != 'POST')
-    return notFound(res)
+    return notFound(req, res)
 
   const dom = domain.create()
   dom.add(res)
@@ -167,9 +178,7 @@ function statusPage(req, res) {
             twitterId: result.id_str
           }, function (err, meta) {
             if (err) throw err
-
-            res.writeHead(303, { Location: '/' })
-            res.end()
+            redirect(res, '/')
           })
         })
       })
@@ -177,12 +186,73 @@ function statusPage(req, res) {
   })
 }
 
+function loginPage(req, res) {
+  if (req.method == 'GET')
+    return render('login', {
+      title: 'Login',
+      user: req.session.user
+    })(req, res)
+
+  if (req.method != 'POST')
+    return notFound(req, res)
+
+
+  getPostData(req, function (err, post) {
+    persona(post.assertion, function (err, email) {
+      if (err) {
+        console.error(err)
+        return forbidden(res)
+      }
+      req.session.user = email
+      redirect(res, '/')
+    })
+  })
+}
+
+function redirect(res, location) {
+  res.writeHead(303, { Location: location || '/' })
+  res.end()
+}
+
+function getPostData(req, callback) {
+  req.pipe(concat(function (data) {
+    const post = qs.parse(data.toString('utf8'))
+    callback(null, post)
+  })).on('error', function (err) {
+    callback(err)
+  })
+}
+
+function requireAdmin(endpoint) {
+  return withSession(function (req, res) {
+    const auth = env('auth')
+    const user = req.session.user
+    if (!user || user !== auth.get('admin'))
+      return forbidden(res)
+    return endpoint(req, res)
+  })
+}
+
+function withSession(endpoint) {
+  return function (req, res) {
+    session(req, res, function (err) {
+      if (err) return serverError(err, res)
+      return endpoint(req, res)
+    })
+  }
+}
+
 function serverError(err, res) {
   console.error('error', err.stack)
   return respond(500, 'Internal Server Error', res)
 }
 
-function notFound(res) {
+function forbidden(res) {
+  return respond(403, 'Forbidden', res)
+}
+
+function notFound(req, res) {
+  console.dir(req.url)
   return respond(404, 'Not Found', res)
 }
 

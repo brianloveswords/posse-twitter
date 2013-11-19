@@ -7,8 +7,10 @@ const fmt = util.format.bind(util)
 const escape = handlebars.Utils.escapeExpression
 
 module.exports = {
+  fromFile: tpl,
   header: tpl('header.html'),
   status: tpl('status-entry.html'),
+  login: tpl('login.html'),
   footer: tpl('footer.html'),
   helpers: {
     linkify: linkify,

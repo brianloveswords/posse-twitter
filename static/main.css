@@ -6,9 +6,23 @@ body {
   width: 32em;
   font-family: 'Fira Sans';
   line-height: 1.3em;
-  padding: 3em 0;
+  padding: 3em 0 0 0;
   margin: auto;
 }
+a {
+  text-decoration: none;
+}
+footer {
+  border-top: 1px dotted #aaa;
+  margin: 2em 0 1em;
+  padding: 1em 0 0;
+  color: #ddd;
+}
+footer a {
+  color: #aaa;
+  font-weight: bold;
+}
+
 textarea {
   display: block;
   width: 100%;
@@ -49,7 +63,6 @@ input[name="replyTo"], input[name="statusLink"]{
 .external-link a {
   /* transition: color 0.3s; */
   color: #acf;
-  text-decoration: none;
 }
 .external-link a:hover {
   color: #7af;
@@ -75,7 +88,6 @@ time a {
   color: #ddd;
   font-weight: 300;
   white-space: nowrap;
-  text-decoration: none;
   border-bottom: 1px dotted #fff;
 }
 time a:hover {
@@ -93,7 +105,6 @@ article .status {
   display: inline;
 }
 article .status a {
-  text-decoration: none;
   font-weight: bold;
   color: #444;
 }

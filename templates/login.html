@@ -1,0 +1,25 @@
+<script src="https://login.persona.org/include.js"></script>
+<link rel="stylesheet" href="/static/persona-buttons.css" />
+<style>
+  .wrap{
+      margin: 100px auto;
+      text-align: center;
+      width: 300px;
+    }
+    .wrap a {
+      margin-bottom: 40px;
+    }
+  </style>
+<div class="wrap">
+  <a href="#" class="persona-button js-persona-login"><span>Sign in with your Email</span></a>
+</div>
+
+<form class="js-persona-form"
+      method="post"
+      data-user="{{user}}"
+      data-login-url="/login"
+      data-logout-url="/logout">
+  <input class="js-persona-assertion" type="hidden" name="assertion">
+</form>
+
+<script src="/static/login.js"></script>
