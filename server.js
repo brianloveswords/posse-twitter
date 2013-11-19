@@ -243,6 +243,7 @@ function withSession(endpoint) {
   return function (req, res) {
     session(req, res, function (err) {
       if (err) return serverError(err, res)
+      console.dir(req.session)
       return endpoint(req, res)
     })
   }
