@@ -19,8 +19,9 @@
       $form.submit()
     },
     onlogout: function () {
-      $form.attr('action', $form.data('logout-url'))
-      $form.submit()
+      // we don't actually want to do anything since we're not being ajaxy
+      // $form.attr('action', $form.data('logout-url'))
+      // $form.submit()
     }
   })
 
