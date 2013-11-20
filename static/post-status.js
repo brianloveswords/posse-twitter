@@ -31,9 +31,11 @@
     if (!statusId) return
 
     Remote.getStatusInfo(statusId, function (err, status) {
+      const oldStatus = $statusInput.val().trim()
+      const users = Twitter.removeSelfFromList(status.users)
       $replyToStatus.addClass('found')
       $replyToStatus.text(status.text)
-      $statusInput.val(status.users.join(' '))
+      $statusInput.val([users.join(' '), oldStatus].join(' '))
     })
   })
 
@@ -43,4 +45,4 @@
   updateCount()
 
 }(Zepto))
-//  https://twitter.com/lawnsea/status/403178276610248704
+// https://twitter.com/ag_dubs/status/403223724889219072

@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const handlebars = require('handlebars')
 const util = require('util')
+const xtend = require('xtend')
 const fmt = util.format.bind(util)
 
 const escape = handlebars.Utils.escapeExpression
@@ -27,7 +28,8 @@ function read(name) {
 
 function tpl(name) {
   return function (data) {
-    return handlebars.compile(read(name))(data)
+    const context = xtend(this.defaults || {}, data)
+    return handlebars.compile(read(name))(context)
   }
 }
 

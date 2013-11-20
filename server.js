@@ -20,6 +20,10 @@ const twitter = require('./db/twitter')
 const tweet = require('./tweet')
 const template = require('./template')
 
+template.defaults = {
+  accounts: env.get('accounts')
+}
+
 router.addRoute('/', index)
 router.addRoute('/api/get-tweet/:statusId', requireAdmin(usersFromTweet))
 router.addRoute('/login', withSession(loginPage))
