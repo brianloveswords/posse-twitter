@@ -21,6 +21,7 @@ const tweet = require('./tweet')
 const template = require('./template')
 
 router.addRoute('/', index)
+router.addRoute('/api/get-tweet/:statusId', requireAdmin(usersFromTweet))
 router.addRoute('/login', withSession(loginPage))
 router.addRoute('/logout', withSession(logout))
 router.addRoute('/status/:id', singleStatus)
@@ -237,6 +238,35 @@ function logout(req, res) {
   redirect(res, '/')
 }
 
+function usersFromTweet(req, res) {
+  function sendError(err) {
+    console.dir(err)
+    res.statusCode = 500
+    return res.end(JSON.stringify({
+      status: 'error',
+      error: err
+    }))
+  }
+
+  res.setHeader('content-type', 'application/json')
+  const id = this.params.statusId
+  tweet.get({id: id}, function (err, result) {
+    if (err)
+      return sendError(err)
+
+    try {
+      const users = tweet.getUsersFromTweet(result)
+      return res.end(JSON.stringify({
+        status: 'okay',
+        users: users,
+        text: result.text,
+      }))
+    } catch (err) {
+      return sendError(err)
+    }
+  })
+}
+
 function redirect(res, location) {
   res.writeHead(303, { Location: location || '/' })
   res.end()
@@ -257,7 +287,7 @@ function requireAdmin(endpoint) {
     const user = req.session.user
     if (!user || user !== auth.get('admin'))
       return forbidden(res)
-    return endpoint(req, res)
+    return endpoint.call(this, req, res)
   })
 }
 
@@ -266,8 +296,8 @@ function withSession(endpoint) {
     session(req, res, function (err) {
       if (err) return serverError(err, res)
       console.dir(req.session)
-      return endpoint(req, res)
-    })
+      return endpoint.call(this, req, res)
+    }.bind(this))
   }
 }
 

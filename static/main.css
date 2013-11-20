@@ -54,6 +54,21 @@ input[type="submit"]:focus {
 input[name="replyTo"], input[name="statusLink"]{
   width: 39.3em;
 }
+
+#existing-status {
+  font-size: 80%;
+  color: #666;
+  border: 1px solid #fff;
+  background: #fff;
+  height: 0;
+  border-radius: 0.5em;
+}
+#existing-status.found {
+  height: auto;
+  background: #eee;
+  border: 1px solid #ddd;
+  padding: 0.5em 1em;
+}
 #character-count {
   text-align: right;
   font-weight: bold;

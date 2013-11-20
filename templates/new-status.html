@@ -1,12 +1,19 @@
 <h1>New Status</h1>
 <form method="post" action="/status">
   <label>Reply To?
-    <input type="text" name="replyTo" placeholder="https://twitter.com/brianloveswords/status/12345"/>
+    <input id="reply-to"
+           type="text"
+           name="replyTo"
+           placeholder="https://twitter.com/brianloveswords/status/12345"/>
   </label>
+
+  <p id="existing-status"></p>
 
   <textarea id="status" name="text" data-key="ctrl+enter" data-action="submit"></textarea>
   <aside id="character-count">140</aside>
   <input type="submit" value="Post Status">
 </form>
 
+<script src="/static/twitter.js"></script>
+<script src="/static/remote.js"></script>
 <script src="/static/post-status.js"></script>

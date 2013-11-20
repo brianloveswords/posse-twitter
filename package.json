@@ -16,7 +16,8 @@
     "habitat": "~1.1.0",
     "lodash.foreach": "~2.3.0",
     "request": "~2.27.0",
-    "ecstatic": "~0.4.12"
+    "ecstatic": "~0.4.12",
+    "lodash.pluck": "~2.3.0"
   },
   "devDependencies": {
     "tap": "~0.4.4"

@@ -1,9 +1,20 @@
 <h1>Reblog</h1>
 <form method="post" action="/reblog">
   <label>Reblog Status
-    <input type="text" name="statusLink" placeholder="https://twitter.com/brianloveswords/status/12345"/>
+    <input type="text"
+           id="status-link"
+           name="statusLink"
+           placeholder="https://twitter.com/brianloveswords/status/12345"/>
   </label>
+
+  <p id="existing-status"></p>
+
   <p>
     <input type="submit" value="Post Status">
   </p>
+
 </form>
+
+<script src="/static/twitter.js"></script>
+<script src="/static/remote.js"></script>
+<script src="/static/reblog.js"></script>

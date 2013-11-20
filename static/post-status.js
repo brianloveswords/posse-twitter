@@ -1,17 +1,19 @@
-(function ($) {
-  const $input = $('#status')
+;(function ($) {
+  const $replyTo = $('#reply-to')
+  const $replyToStatus = $('#existing-status')
+  const $statusInput = $('#status')
   const $count = $('#character-count')
-
-  const placeholder = 'xxxxxxxxxxxxxxxxxxxxx' // t.co links are 20 chars
 
   var type = 'down'
 
   function updateCount() {
     if (type == 'up')
-      return $count.text($input.val().length)
+      return $count.text($statusInput.val().length)
 
     const MAXLEN = 140
-    const inputText = $input.val()
+    const placeholder = 'xxxxxxxxxxxxxxxxxxxxx' // t.co links are 20 chars
+
+    const inputText = $statusInput.val()
       .replace(/http:\/\/\S*/, placeholder)
       .replace(/https:\/\/\S*/, placeholder + 'x')
     const remaining = MAXLEN - inputText.length
@@ -23,8 +25,22 @@
     updateCount()
   })
 
-  $input.on('keyup', updateCount)
-  $input.on('keydown', updateCount)
+  $replyTo.on('keyup', function () {
+    const $this = $(this)
+    const statusId = Twitter.extractId($this.val())
+    if (!statusId) return
+
+    Remote.getStatusInfo(statusId, function (err, status) {
+      $replyToStatus.addClass('found')
+      $replyToStatus.text(status.text)
+      $statusInput.val(status.users.join(' '))
+    })
+  })
+
+  $statusInput.on('keyup', updateCount)
+  $statusInput.on('keydown', updateCount)
+
   updateCount()
 
-}(jQuery))
+}(Zepto))
+//  https://twitter.com/lawnsea/status/403178276610248704
