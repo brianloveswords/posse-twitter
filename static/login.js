@@ -5,8 +5,6 @@
 
   const user = $form.data('user')
 
-  console.dir(user)
-
   $login.on('click', function (evt) {
     navigator.id.request()
   })

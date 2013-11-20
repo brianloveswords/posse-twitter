@@ -209,16 +209,16 @@ function statusPage(req, res) {
 function loginPage(req, res) {
   req.session.datetime = Date.now()
 
-  if (req.method == 'GET')
+  if (req.method == 'GET') {
     res.setHeader('cache-control', 'no-cache, no-store, must-revalidate')
     return render('login', {
       title: 'Login',
       user: req.session.user
     })(req, res)
+  }
 
   if (req.method != 'POST')
     return notFound(req, res)
-
 
   getPostData(req, function (err, post) {
     persona(post.assertion, function (err, email) {
