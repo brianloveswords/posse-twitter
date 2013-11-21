@@ -16,7 +16,6 @@ const env = require('./env')
 const persona = require('./persona')
 const session = require('./session')
 const status = require('./db/status')
-const twitter = require('./db/twitter')
 const tweet = require('./tweet')
 const template = require('./template')
 
@@ -83,8 +82,12 @@ function hydrateStatusRow(row) {
 function index(req, res) {
   res.setHeader('content-type','text/html; charset=utf8')
   res.write(template.header())
+  var count = 0
   status.createReadStream({}, {
     sort: { createdAt: 'desc' },
+    limit: 20,
+    page: 1,
+    debug: true,
   }).on('end', function finish() {
 
     res.end(template.footer())
@@ -126,7 +129,6 @@ function reblogPage(req, res) {
     })
 
     dom.run(function () {
-      // 1. retweet to twitter
       tweet.retweet({ id: statusId }, function (err, resp) {
         if (err) throw err
 
@@ -136,24 +138,14 @@ function reblogPage(req, res) {
           resp.retweeted_status.user.screen_name,
           resp.retweeted_status.text)
 
-        // 2. get text back, post to own `status` table
         status.put({
           text: text,
-          reblog: post.statusLink
+          reblog: post.statusLink,
+          twitterId: tweetId,
+
         }, function (err, meta) {
           if (err) throw err
-
-          // 3. get status id back, post to `twitter` table
-          twitter.put({
-            statusId: meta.insertId,
-            twitterId: tweetId
-          }, function (err, meta) {
-            if (err) throw err
-
-            // 4. redirect
-            res.writeHead(303, { Location: '/' })
-            res.end()
-          })
+          redirect(res, '/')
         })
       })
     })
@@ -192,19 +184,11 @@ function statusPage(req, res) {
 
         status.put({
           text: post.text,
-          replyTo: post.replyTo
+          replyTo: post.replyTo,
+          twitterId: twitterId,
         }, function (err, meta) {
           if (err) throw err
-          const statusId = meta.insertId
-
-          twitter.put({
-            statusId: statusId,
-            twitterId: twitterId,
-          }, function (err, meta) {
-            if (err) throw err
-
-            redirect(res, '/')
-          })
+          redirect(res, '/')
         })
       })
     }))

@@ -3,3 +3,4 @@ node_modules
 bin/sync
 /.cookie_secret
 /config.json
+/bin/tweets.csv
