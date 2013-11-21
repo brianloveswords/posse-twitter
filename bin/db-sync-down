@@ -1,0 +1,5 @@
+#!/bin/bash
+ssh bumblebee 'mysqldump -uroot microblog | gzip' | \
+    tee ~/Dropbox/microblog.sql.gz | \
+    gunzip | \
+    mysql -uroot microblog

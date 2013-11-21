@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+
+const csvDecoder= require('binary-csv')({json: true})
+const request = require('request')
+const fs = require('fs')
+const throttle = require('throttle-function')
+const mapStream = require('map-stream')
+const cheerio = require('cheerio')
+const util = require('util')
+const statusDb = require('../db/status')
+
+const logger = mapStream(function(tweet, next) {
+  console.log(tweet)
+  next(null, tweet)
+})
+
+const fixRetweets = mapStream(function (tweet, next) {
+  if (!tweet.retweeted_status_id)
+    return next(null, tweet)
+
+  getTweetData(tweet, function (err, text) {
+    if (err) {
+      // very likely a deleted tweet :/
+      return next(null, tweet)
+    }
+
+    tweet.text =
+      tweet.text.replace(/(RT @\S+) .*/, function (all, match) {
+        return [match, text].join(' ')
+      })
+
+    return next(null, tweet)
+  })
+})
+
+const dbPrepare = mapStream(function (tweet, next) {
+  return next(null, {
+    createdAt: new Date(tweet.timestamp),
+    twitterId: tweet.tweet_id,
+    text: tweet.text,
+    reblog: retweetUrl(tweet),
+    replyTo: replyUrl(tweet),
+  })
+})
+
+function replyUrl(tweet) {
+  if (!tweet.in_reply_to_user_id)
+    return ''
+  const userId = tweet.in_reply_to_user_id
+  const statusId = tweet.in_reply_to_status_id
+  const pattern = 'https://twitter.com/%s/status/%s'
+  return util.format(pattern, userId, statusId)
+}
+
+function retweetUrl(tweet) {
+  if (!tweet.retweeted_status_id)
+    return ''
+  const userId = tweet.retweeted_status_user_id
+  const statusId = tweet.retweeted_status_id
+  const pattern = 'https://twitter.com/%s/status/%s'
+  return util.format(pattern, userId, statusId)
+}
+
+const getTweetData = throttle(function getRetweetData(tweet, callback) {
+  request.get(retweetUrl(tweet), function (err, response, body) {
+    if (err)
+      return callback(err)
+    if (response.statusCode !== 200) {
+      return callback(new Error('did not get a 200'))
+    }
+
+    const $ = cheerio.load(body)
+    callback(null, $($('.js-tweet-text')[0]).text())
+  })
+}, { limit: 12 }) // try to be polite and only hit twitter 12 times/sec
+
+
+if (!module.parent) {
+  function die(msg) {
+    console.error(msg)
+    process.exit(1)
+  }
+
+  (function main(file){
+    if (!file)
+      return die('fatal error: must provide an input file')
+    fs.createReadStream(file)
+      .pipe(csvDecoder)
+      .pipe(fixRetweets)
+      .pipe(dbPrepare)
+      .pipe(statusDb.createWriteStream({ignoreDupes: true}))
+      .on('dupe', function (row) { console.log('ignoring dupe %s...', row.twitterId)})
+      .on('data', function (row) { console.log(row) })
+      .on('end', function () { statusDb.db.close() })
+  })(process.argv[2])
+}
