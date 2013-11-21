@@ -1,4 +1,4 @@
-const env = require('habitat').load('./config.json')
+const env = require('habitat').load(__dirname + '/config.json')
 
 // console.dir(env('twitter').all())
 
