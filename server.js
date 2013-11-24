@@ -50,7 +50,7 @@ server.on('listening', function () {
   console.log('listening %s:%s', addr.address, addr.port)
 })
 
-server.listen(env.get('port') || 3000)
+server.listen(env.get('port') || env.get('socket') || 3000)
 
 function render(name, context) {
   if (typeof context == 'string')
