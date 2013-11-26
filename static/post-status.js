@@ -31,6 +31,10 @@
     if (!statusId) return
 
     Remote.getStatusInfo(statusId, function (err, status) {
+      if (err) {
+        console.log(err.message)
+        return false
+      }
       const oldStatus = $statusInput.val().trim()
       const users = Twitter.removeSelfFromList(status.users)
       $replyToStatus.addClass('found')

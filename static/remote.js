@@ -1,7 +1,13 @@
 ;(function ($) {
   const Remote = {
+    working: false,
     cache: {},
     getStatusInfo: function (id, callback) {
+      const self = this
+      if (self.working)
+        return callback(new Error('still working'))
+
+      this.working = true
       const url = '/api/get-tweet/' + id
       const cache = this.cache
 
@@ -13,6 +19,7 @@
       console.log('cache miss: ' + url)
 
       $.getJSON(url, function (data, status) {
+        self.working = false
         cache[url] = data
         callback(null, data)
       })

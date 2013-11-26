@@ -1,3 +1,5 @@
+require('cleansocket/listen')
+
 const http = require('http')
 const router = require('routes')()
 const url = require('url')
@@ -47,7 +49,10 @@ server.on('request', function (req, res) {
 
 server.on('listening', function () {
   const addr = this.address()
-  console.log('listening %s:%s', addr.address, addr.port)
+  console.dir(addr)
+  if (addr.port)
+    return console.log('listening %s:%s', addr.address, addr.port)
+  return console.log('listening on %s', addr)
 })
 
 server.listen(env.get('port') || env.get('socket') || 3000)
@@ -150,8 +155,6 @@ function reblogPage(req, res) {
 function statusPage(req, res) {
   const auth = env('auth')
   const user = req.session.user
-  if (!user || user !== auth.get('admin'))
-    return forbidden(res)
 
   if (req.method == 'GET')
     return render('new-status', 'Post a New Status')(req, res)
@@ -266,7 +269,7 @@ function requireAdmin(endpoint) {
     const auth = env('auth')
     const user = req.session.user
     if (!user || user !== auth.get('admin'))
-      return forbidden(res)
+      return redirect(res, '/login')
     return endpoint.call(this, req, res)
   })
 }
