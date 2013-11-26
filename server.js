@@ -88,13 +88,9 @@ function index(req, res) {
     limit: 50,
     page: 1,
   }).on('end', function finish() {
-
     res.end(template.footer())
-
   }).pipe(mapStream(function rows(row, next) {
-
     next(null, template.status(hydrateStatusRow(row)))
-
   })).pipe(res)
 }
 
