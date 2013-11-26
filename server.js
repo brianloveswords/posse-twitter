@@ -84,10 +84,9 @@ function index(req, res) {
   res.write(template.header())
   var count = 0
   status.createReadStream({}, {
-    sort: { createdAt: 'desc' },
+    order: { createdAt: 'desc' },
     limit: 50,
     page: 1,
-    debug: true,
   }).on('end', function finish() {
 
     res.end(template.footer())
