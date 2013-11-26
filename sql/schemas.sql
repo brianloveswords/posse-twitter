@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `status` (
   `text` TEXT,
   `replyTo` TEXT,
   `reblog` TEXT,
-  `twitterId` BIGINT UNIQUE,
-  `facebookId` BIGINT UNIQUE,
+  `twitterId` VARCHAR(80) UNIQUE,
+  `facebookId` VARCHAR(80) UNIQUE,
   KEY `createdAt` (`createdAt`)
 ) ENGINE=InnoDB;

@@ -20,6 +20,7 @@ module.exports = {
 
 handlebars.registerHelper('linkify', linkify)
 handlebars.registerHelper('default', defaultText)
+handlebars.registerHelper('twitterLink', twitterLink)
 
 function read(name) {
   const file = path.join(__dirname, 'templates', name)
@@ -31,6 +32,10 @@ function tpl(name) {
     const context = xtend(this.defaults || {}, data)
     return handlebars.compile(read(name))(context)
   }
+}
+
+function twitterLink(user, statusId) {
+  return fmt('https://twitter.com/%s/status/%s', user, statusId)
 }
 
 function linkify(text) {

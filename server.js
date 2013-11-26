@@ -85,7 +85,7 @@ function index(req, res) {
   var count = 0
   status.createReadStream({}, {
     sort: { createdAt: 'desc' },
-    limit: 20,
+    limit: 50,
     page: 1,
     debug: true,
   }).on('end', function finish() {
@@ -171,26 +171,23 @@ function statusPage(req, res) {
   })
 
   dom.run(function () {
-    req.pipe(concat(function (data) {
-      const post = qs.parse(data.toString('utf8'))
+    getPostData(req, dom.intercept(function (post) {
       const replyToStatusId = tweet.extractId(post.replyTo)
 
       tweet({
         status: post.text,
         replyTo: replyToStatusId
-      }, function (err, result) {
-        if (err) throw err
+      }, dom.intercept(function (result) {
         const twitterId = result.id_str
 
         status.put({
           text: post.text,
           replyTo: post.replyTo,
           twitterId: twitterId,
-        }, function (err, meta) {
-          if (err) throw err
+        }, dom.intercept(function (meta) {
           redirect(res, '/')
-        })
-      })
+        }))
+      }))
     }))
   })
 }

@@ -1,4 +1,4 @@
-const mysql = require('mysql-stream-db')
+const mysql = require('streamsql')
 const env = require('../env')('db')
 
 module.exports = mysql.connect({
