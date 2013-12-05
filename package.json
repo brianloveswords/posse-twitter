@@ -6,7 +6,7 @@
   "dependencies": {
     "routes": "~0.2.0",
     "twit": "~1.1.11",
-    "streamsql": "0.4.0",
+    "streamsql": "0.4.2",
     "concat-stream": "~1.2.0",
     "handlebars": "~1.1.2",
     "map-stream": "0.0.3",
@@ -28,7 +28,8 @@
     "tap": "~0.4.4"
   },
   "scripts": {
-    "start": "SOCKET=/tmp/posse-twitter.socket supervisor server.js",
+    "start": "SOCKET=/tmp/posse-twitter.sock supervisor server.js",
+    "sync-code": "bin/sync",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brian J Brennan",
