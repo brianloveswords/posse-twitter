@@ -1,6 +1,4 @@
 domready(function () {
-  console.dir($)
-
   const $replyTo = $('#reply-to')
   const $replyToStatus = $('#existing-status')
   const $statusInput = $('#status')
@@ -27,8 +25,10 @@ domready(function () {
     updateCount()
   })
 
-  $replyTo.on('keyup', function () {
-    const $this = $(this)
+  $replyTo.on('keyup', getStatus)
+
+  function getStatus() {
+    const $this = $replyTo
     const statusId = Twitter.extractId($this.val())
     if (!statusId) return
 
@@ -41,13 +41,18 @@ domready(function () {
       const users = Twitter.removeSelfFromList(status.users)
       $replyToStatus.addClass('found')
       $replyToStatus.text(status.text)
-      $statusInput.val([users.join(' '), oldStatus].join(' '))
+
+      const mentions = users.join(' ')
+      const newStatus = mentions + ' ' + oldStatus
+
+      if (oldStatus.indexOf(mentions) !== 0)
+        $statusInput.val(newStatus)
     })
-  })
+  }
 
   $statusInput.on('keyup', updateCount)
   $statusInput.on('keydown', updateCount)
 
   updateCount()
-
+  getStatus()
 })

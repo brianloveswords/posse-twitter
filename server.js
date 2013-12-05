@@ -112,8 +112,12 @@ function singleStatus(req, res) {
 }
 
 function reblogPage(req, res) {
-  if (req.method == 'GET')
-    return render('reblog', 'Reblog a Status')(req, res)
+  if (req.method == 'GET') {
+    return render('reblog', {
+      title: 'Reblog a Status',
+      statusLink: getParams(req).s,
+    })(req, res)
+  }
 
   if (req.method != 'POST')
     return notFound(req, res)
@@ -156,8 +160,12 @@ function statusPage(req, res) {
   const auth = env('auth')
   const user = req.session.user
 
-  if (req.method == 'GET')
-    return render('new-status', 'Post a New Status')(req, res)
+  if (req.method == 'GET') {
+    return render('new-status', {
+      title: 'Post a New Status',
+      statusLink: getParams(req).s,
+    })(req, res)
+  }
 
   if (req.method != 'POST')
     return notFound(req, res)
@@ -302,4 +310,8 @@ function respond(status, body, res) {
   res.writeHead(status, {'content-length': body.length})
   res.write(body)
   res.end()
+}
+
+function getParams(req) {
+  return qs.parse(url.parse(req.url).query)
 }
