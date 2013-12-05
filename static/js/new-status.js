@@ -1,4 +1,6 @@
-;(function ($) {
+domready(function () {
+  console.dir($)
+
   const $replyTo = $('#reply-to')
   const $replyToStatus = $('#existing-status')
   const $statusInput = $('#status')
@@ -48,5 +50,4 @@
 
   updateCount()
 
-}(Zepto))
-// https://twitter.com/ag_dubs/status/403223724889219072
+})

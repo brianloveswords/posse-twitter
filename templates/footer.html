@@ -5,11 +5,13 @@
   </footer>
 
   <script>
-    setTimeout(function(){
-      var style = document.createElement('style')
-      style.innerHTML = '* { transition: all 0.3s }'
-      document.body.appendChild(style)
-    }, 0)
+    domready(function(){
+      setTimeout(function(){
+        var style = document.createElement('style')
+        style.innerHTML = '* { transition: all 0.3s }'
+        document.body.appendChild(style)
+      }, 0)
+    })
   </script>
   </body>
 </html>
