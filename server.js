@@ -49,7 +49,6 @@ server.on('request', function (req, res) {
 
 server.on('listening', function () {
   const addr = this.address()
-  console.dir(addr)
   if (addr.port)
     return console.log('listening %s:%s', addr.address, addr.port)
   return console.log('listening on %s', addr)
@@ -286,7 +285,6 @@ function withSession(endpoint) {
   return function (req, res) {
     session(req, res, function (err) {
       if (err) return serverError(err, res)
-      console.dir(req.session)
       return endpoint.call(this, req, res)
     }.bind(this))
   }
@@ -302,7 +300,6 @@ function forbidden(res) {
 }
 
 function notFound(req, res) {
-  console.dir(req.url)
   return respond(404, 'Not Found', res)
 }
 
