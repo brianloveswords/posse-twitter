@@ -14,8 +14,8 @@ domready(function () {
     const placeholder = 'xxxxxxxxxxxxxxxxxxxxx' // t.co links are 20 chars
 
     const inputText = $statusInput.val()
-      .replace(/http:\/\/\S*/, placeholder)
-      .replace(/https:\/\/\S*/, placeholder + 'x')
+      .replace(/http:\/\/\S*/g, placeholder)
+      .replace(/https:\/\/\S*/g, placeholder + 'x')
     const remaining = MAXLEN - inputText.length
     $count.text(remaining)
   }

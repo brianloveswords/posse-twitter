@@ -113,10 +113,11 @@ function singleStatus(req, res) {
 }
 
 function reblogPage(req, res) {
+  const statusLink = getParams(req).s
   if (req.method == 'GET') {
     return render('reblog', {
       title: 'Reblog a Status',
-      statusLink: getParams(req).s,
+      statusLink: statusLink != '%s' ? statusLink : '',
     })(req, res)
   }
 
@@ -160,11 +161,11 @@ function reblogPage(req, res) {
 function statusPage(req, res) {
   const auth = env('auth')
   const user = req.session.user
-
+  const statusLink = getParams(req).s
   if (req.method == 'GET') {
     return render('new-status', {
       title: 'Post a New Status',
-      statusLink: getParams(req).s,
+      statusLink: statusLink != '%s' ? statusLink : '',
     })(req, res)
   }
 
