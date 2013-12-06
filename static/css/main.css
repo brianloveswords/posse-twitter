@@ -3,21 +3,44 @@
 }
 */
 body {
+  position: relative;
   width: 32em;
   font-family: 'Fira Sans';
   line-height: 1.3em;
-  padding: 3em 0 0 0;
+  padding: 1em 0 0 0;
   margin: auto;
 }
+
+header {
+  color: #444;
+  border-bottom: 1px dotted #ccc;
+  padding: 0 0 0.4em;
+  margin: 0 0 1em;
+}
+
+header h1,
+header h2 {
+  margin: 0;
+  padding: 0;
+}
+
+header h2 {
+  color: #fefefe;
+  margin: 0.35em 0 0;
+  text-shadow: 0px 0px 2px #ccc;
+}
+
 a {
   text-decoration: none;
 }
+
 footer {
   border-top: 1px dotted #aaa;
   margin: 2em 0 1em;
   padding: 1em 0 0;
   color: #ddd;
 }
+
 footer a {
   color: #aaa;
   font-weight: bold;
@@ -75,6 +98,32 @@ input[name="replyTo"], input[name="statusLink"]{
   color: #ccc;
   text-shadow: 1px 1px 3px #eee;
 }
+
+.subscribe {
+  position: absolute;
+  top: 1em;
+  right: 0em;
+  font-family: "Fira Sans";
+  background: #fff;
+  color: #3c3;
+  border: 1px solid #3c3;
+  padding: 0.45em 0.6em;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.subscribe:hover {
+  color: white;
+  background: #0a0;
+  border-color: #0a0;
+}
+
+.subscribe:active {
+  background: #3c3;
+  border-color: #3c3;
+}
+
 .external-link a {
   /* transition: color 0.3s; */
   color: #acf;

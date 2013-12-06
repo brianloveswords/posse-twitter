@@ -13,6 +13,7 @@ const ecstatic = require('ecstatic')
 const mapStream = require('map-stream')
 const moment = require('moment')
 const util = require('util')
+const RSS = require('rss')
 
 const env = require('./env')
 const persona = require('./persona')
@@ -26,6 +27,7 @@ template.defaults = {
 }
 
 router.addRoute('/', index)
+router.addRoute('/activity.xml', rssFeed)
 router.addRoute('/api/get-tweet/:statusId', requireAdmin(usersFromTweet))
 router.addRoute('/login', withSession(loginPage))
 router.addRoute('/logout', withSession(logout))
@@ -194,6 +196,26 @@ function statusPage(req, res) {
         }))
       }))
     }))
+  })
+}
+function rssFeed(req, res) {
+  const feedOpts = env.get('feed')
+  const feed = new RSS(feedOpts)
+  status.get({}, {
+    limit: 20,
+    order: { createdAt: 'desc' },
+  }, function (err, statuses) {
+    statuses.map(function prepareForFeed(status) {
+      return {
+        title: 'Status update at ' + status.createdAt,
+        description: status.text,
+        url: feedOpts.site_url + '/status/' + status.id,
+        categories: ['status'],
+        date: status.createdAt,
+      }
+    }).forEach(feed.item.bind(feed))
+
+    res.end(feed.xml())
   })
 }
 

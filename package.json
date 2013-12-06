@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "rss": "0.2.1",
     "routes": "~0.2.0",
     "twit": "~1.1.11",
     "streamsql": "0.4.2",
@@ -28,7 +29,7 @@
     "tap": "~0.4.4"
   },
   "scripts": {
-    "start": "SOCKET=/tmp/posse-twitter.sock supervisor server.js",
+    "start": "PORT=3000 supervisor server.js",
     "sync-code": "bin/sync",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

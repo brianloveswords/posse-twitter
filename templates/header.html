@@ -6,9 +6,17 @@
     <title>{{default title "bjb.io"}}</title>
     <link rel="stylesheet" type="text/css" href="/static/css/fira.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="alternate" type="application/rss+xml" href="/activity.xml">
     <link rel="icon" type="image/png" href="/static/favicon.png?r=2">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"></script>
     <script src="/static/js/domready.js"></script>
   </head>
   <body data-twitter-handle="{{ accounts.twitter }}">
+    <header>
+      <h1>Brian J Brennan</h1>
+      <h2>Says stuff sometimes</h2>
+      <input type="button" class="subscribe" onclick="(function(){var z=document.createElement('script');z.src='https://www.subtome.com/load.js';document.body.appendChild(z);})()" value="Subscribe">
+
+
+    </header>
